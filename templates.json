@@ -1,0 +1,33 @@
+{
+  "current_template": "Default",
+  "templates": {
+    "Default": {
+      "card_w": 450,
+      "card_h": 280,
+      "bg_color": "#1e293b",
+      "outline_color": "#475569",
+      "accent_color": "#3b82f6",
+      "header_bg": "#0f172a",
+      "footer_bg": "#0f172a",
+      "text_primary": "#f1f5f9",
+      "text_secondary": "#94a3b8",
+      "text_accent": "#93c5fd",
+      "college_text": "SHRI BHAGUBHAI MAFATLAL POLYTECHNIC",
+      "college_subtext": "Computer Engineering Department",
+      "photo_rect": {
+        "x": 24,
+        "y": 72,
+        "w": 96,
+        "h": 116
+      },
+      "info_start": {
+        "x": 136,
+        "y": 78
+      },
+      "barcode_start": {
+        "x": 24,
+        "y": 200
+      }
+    }
+  }
+}

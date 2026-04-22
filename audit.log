@@ -1,0 +1,71 @@
+2026-04-21 11:08:50  [ADD] student | 1 | id=name=Test User, roll_no=T001 | 
+2026-04-21 11:08:50  [EXPORT_CSV] student | None | id=file=C:\Users\Aalok\AppData\Local\Temp\tmpnbdh5vsr.csv, rows=1 | 
+2026-04-21 11:08:55  [IMPORT_CSV] student | None | id=file=C:\Users\Aalok\AppData\Local\Temp\tmpnbdh5vsr.csv, added=0, skipped=1 | 
+2026-04-21 11:21:27  [ADD] student | 2 | id=name=Janak, roll_no=A057 | 
+2026-04-21 11:21:45  [EXPORT_CSV] student | None | id=file=C:/Users/Aalok/Downloads/students_export.csv, rows=2 | 
+2026-04-21 11:24:40  [ADD] staff | 1 | id=name=Siddhu, employee_id=69 | 
+2026-04-21 11:30:33  [BACKUP] database | None | id=file=backups_test\idcard_20260421_113033.db | 
+2026-04-21 19:52:14  [DELETE] student | 1 | id=name=Test User | 
+2026-04-21 20:04:06  [UPDATE] student | 2 | id=name=Janak, roll_no=A057 | 
+2026-04-21 20:06:54  [ADD] student | 3 | id=name=SS, roll_no=A058 | 
+2026-04-21 20:10:22  [DELETE] student | 2 | id=name=Janak | 
+2026-04-21 20:11:27  [ADD] student | 2 | id=name=Nimray, roll_no=A012 | 
+2026-04-22 09:49:48  [LOGIN] user | None | id=username=admin | 
+2026-04-22 12:37:53  [LOGIN] user | None | id=username=admin | 
+2026-04-22 12:38:03  [ADD] student | 3 | id=name=Faraj Dada, roll_no=24ME001 | 
+2026-04-22 12:38:03  [ADD] student | 4 | id=name=Joshua Dugar, roll_no=24CH002 | 
+2026-04-22 12:38:03  [ADD] student | 5 | id=name=Elijah Varughese, roll_no=24EL003 | 
+2026-04-22 12:38:03  [ADD] student | 6 | id=name=Imaran Goda, roll_no=24IT004 | 
+2026-04-22 12:38:03  [ADD] student | 7 | id=name=Ekanta Doctor, roll_no=24CH005 | 
+2026-04-22 12:38:04  [ADD] student | 8 | id=name=Laban Memon, roll_no=24CI006 | 
+2026-04-22 12:38:04  [ADD] student | 9 | id=name=Vihaan Bir, roll_no=24CI007 | 
+2026-04-22 12:38:04  [ADD] student | 10 | id=name=Nihal Uppal, roll_no=24CH008 | 
+2026-04-22 12:38:04  [ADD] student | 11 | id=name=Yagnesh Bhatnagar, roll_no=24EL009 | 
+2026-04-22 12:38:04  [ADD] student | 12 | id=name=Rudra Naidu, roll_no=24CH010 | 
+2026-04-22 12:38:04  [ADD] student | 13 | id=name=Madhav Dash, roll_no=24IT011 | 
+2026-04-22 12:38:04  [ADD] student | 14 | id=name=Jeremiah Das, roll_no=24CE012 | 
+2026-04-22 12:38:04  [ADD] student | 15 | id=name=Viraj Chakrabarti, roll_no=24IT013 | 
+2026-04-22 12:38:04  [ADD] student | 16 | id=name=Upma Dara, roll_no=24IT014 | 
+2026-04-22 12:38:04  [ADD] student | 17 | id=name=Bhavika Deshpande, roll_no=24CE015 | 
+2026-04-22 12:38:04  [ADD] student | 18 | id=name=Gagan Deshmukh, roll_no=24EL016 | 
+2026-04-22 12:38:04  [ADD] student | 19 | id=name=Kavya Hans, roll_no=24IT017 | 
+2026-04-22 12:38:04  [ADD] student | 20 | id=name=Udarsh Hans, roll_no=24IT018 | 
+2026-04-22 12:38:04  [ADD] student | 21 | id=name=Nimrat Uppal, roll_no=24IT019 | 
+2026-04-22 12:38:04  [ADD] student | 22 | id=name=Omaja Kibe, roll_no=24CE020 | 
+2026-04-22 12:38:04  [ADD] student | 23 | id=name=Sanaya Narula, roll_no=24CH021 | 
+2026-04-22 12:38:04  [ADD] student | 24 | id=name=Veda Kothari, roll_no=24EL022 | 
+2026-04-22 12:38:04  [ADD] student | 25 | id=name=Mitali Patil, roll_no=24CI023 | 
+2026-04-22 12:38:04  [ADD] student | 26 | id=name=Yashoda Yogi, roll_no=24CH024 | 
+2026-04-22 12:38:04  [ADD] student | 27 | id=name=Kala Amble, roll_no=24CI025 | 
+2026-04-22 12:38:04  [ADD] student | 28 | id=name=Owen Bal, roll_no=24CH026 | 
+2026-04-22 12:38:05  [ADD] student | 29 | id=name=Qadim Mishra, roll_no=24IT027 | 
+2026-04-22 12:38:05  [ADD] student | 30 | id=name=Tristan Thakur, roll_no=24IT028 | 
+2026-04-22 12:38:05  [ADD] student | 31 | id=name=Aryan Raja, roll_no=24CE029 | 
+2026-04-22 12:38:05  [ADD] student | 32 | id=name=Amara Prasad, roll_no=24EL030 | 
+2026-04-22 12:38:05  [ADD] staff | 2 | id=name=Aachal Mital, employee_id=EMP0001 | 
+2026-04-22 12:38:05  [ADD] staff | 3 | id=name=Isha Dhawan, employee_id=EMP0002 | 
+2026-04-22 12:38:05  [ADD] staff | 4 | id=name=Harita Luthra, employee_id=EMP0003 | 
+2026-04-22 12:38:05  [ADD] staff | 5 | id=name=Veda Bava, employee_id=EMP0004 | 
+2026-04-22 12:38:05  [ADD] staff | 6 | id=name=Anusha Nazareth, employee_id=EMP0005 | 
+2026-04-22 12:38:05  [ADD] staff | 7 | id=name=Ekta Dube, employee_id=EMP0006 | 
+2026-04-22 12:38:05  [ADD] staff | 8 | id=name=Irya Gokhale, employee_id=EMP0007 | 
+2026-04-22 12:38:05  [ADD] staff | 9 | id=name=Reyansh Oak, employee_id=EMP0008 | 
+2026-04-22 12:38:05  [ADD] staff | 10 | id=name=Vasana Mani, employee_id=EMP0009 | 
+2026-04-22 12:38:05  [ADD] staff | 11 | id=name=Garima Parsa, employee_id=EMP0010 | 
+2026-04-22 12:38:05  [DEMO_DATA] system | None | id=students=30, staff=10 | 
+2026-04-22 12:39:20  [EXPORT_CSV] student | None | id=file=C:/Users/Aalok/Downloads/students_export.csv, rows=32 | 
+2026-04-22 12:50:49  [LOGIN] user | None | id=username=admin, role=admin | 
+2026-04-22 12:51:09  [LOGOUT] user | None | id=username=admin, session_duration=0m 19s | 
+2026-04-22 21:17:21  [LOGIN] user | None | id=username=admin, role=admin | 
+2026-04-22 21:19:45  [LOGOUT] user | None | id=username=admin, session_duration=2m 24s | 
+2026-04-22 21:35:26  [LOGIN] user | None | id=username=admin, role=admin | 
+2026-04-22 21:38:19  [LOGIN] user | None | id=username=admin, role=admin | 
+2026-04-22 21:41:26  [LOGIN] user | None | id=username=admin, role=admin | 
+2026-04-22 21:41:45  [ADD_USER] user | None | id=username=neel, role=viewer | 
+2026-04-22 21:44:34  [LOGIN] user | None | id=username=neel, role=viewer | 
+2026-04-22 21:44:45  [LOGOUT] user | None | id=username=neel, session_duration=0m 10s | 
+2026-04-22 21:44:51  [LOGIN] user | None | id=username=admin, role=admin | 
+2026-04-22 21:45:14  [ADD_USER] user | None | id=username=operator, role=operator | 
+2026-04-22 21:45:19  [LOGOUT] user | None | id=username=admin, session_duration=0m 28s | 
+2026-04-22 21:45:27  [LOGIN] user | None | id=username=operator, role=operator | 
+2026-04-22 21:45:39  [LOGOUT] user | None | id=username=operator, session_duration=0m 12s | 

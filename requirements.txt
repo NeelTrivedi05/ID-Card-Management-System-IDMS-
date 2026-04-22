@@ -1,0 +1,21 @@
+# ── Core image handling (ID card photo display) ─────────────
+Pillow>=10.0.0
+
+# ── Analytics charts (Phase 2 — Analytics Dashboard) ────────
+matplotlib>=3.8.0
+
+# ── AI photo validation (Phase 4 — face detection) ──────────
+opencv-python>=4.9.0
+
+# ── Phase 3A — Real QR Code on ID Card ──────────────────────
+qrcode[pil]>=7.4
+
+# ── Phase 3B — Excel Import/Export ──────────────────────────
+openpyxl>=3.1
+
+# ── Phase 3B — Demo Data Generator ─────────────────────────
+faker>=25.0
+
+# ── NOTE: The following are Python standard-library modules ─
+# and do NOT need to be installed via pip:
+#   tkinter, sqlite3, csv, logging, datetime, os, tempfile

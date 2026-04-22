@@ -4,13 +4,16 @@ import shutil
 import os
 from datetime import date
 import database
+import theme as _theme
 
-DARK_BG   = "#1a1a2e"
-PANEL_BG  = "#16213e"
-ACCENT    = "#0f3460"
-ACCENT2   = "#e94560"
-TEXT_MAIN = "#ffffff"
-TEXT_SUB  = "#a0aec0"
+# ── Theme accessors ──
+def _c(key):
+    return _theme.get()[key]
+
+def _t():
+    return _theme.get()
+
+F = _theme.FONTS  # shortcut
 
 PHOTOS_DIR = "photos"
 os.makedirs(PHOTOS_DIR, exist_ok=True)
@@ -25,8 +28,8 @@ DESIGNATIONS    = ["Lecturer", "Senior Lecturer", "HOD",
 class RecordForm:
     def __init__(self, parent, tab_type, mode, record, on_save):
         self.parent   = parent
-        self.tab_type = tab_type   # "student" or "staff"
-        self.mode     = mode       # "add" or "edit"
+        self.tab_type = tab_type
+        self.mode     = mode
         self.record   = record
         self.on_save  = on_save
         self.photo_path = record.get("photo_path", "") if record else ""
@@ -38,18 +41,20 @@ class RecordForm:
             ("staff",   "edit"): "Edit Staff Record",
         }
 
+        t = _t()
+
         self.win = tk.Toplevel(parent)
         self.win.title(title_map[(tab_type, mode)])
-        self.win.geometry("480x560")
-        self.win.configure(bg=DARK_BG)
+        self.win.geometry("500x600")
+        self.win.configure(bg=t["DARK_BG"])
         self.win.resizable(False, False)
         self.win.grab_set()
 
         # Centre
         self.win.update_idletasks()
-        x = (self.win.winfo_screenwidth()  // 2) - 240
-        y = (self.win.winfo_screenheight() // 2) - 280
-        self.win.geometry(f"480x560+{x}+{y}")
+        x = (self.win.winfo_screenwidth()  // 2) - 250
+        y = (self.win.winfo_screenheight() // 2) - 300
+        self.win.geometry(f"500x600+{x}+{y}")
 
         self._build_form()
         if mode == "edit" and record:
@@ -58,106 +63,190 @@ class RecordForm:
     # ── Build the form ────────────────────────────────────────
 
     def _build_form(self):
+        t = _t()
+
         # Header
-        hdr = tk.Frame(self.win, bg=PANEL_BG, pady=12)
+        hdr = tk.Frame(self.win, bg=t["ACCENT"], pady=14)
         hdr.pack(fill="x")
         title_text = ("Add" if self.mode == "add" else "Edit") + \
                      (" Student" if self.tab_type == "student" else " Staff")
-        tk.Label(hdr, text=title_text, font=("Arial", 13, "bold"),
-                 bg=PANEL_BG, fg=TEXT_MAIN).pack()
+        tk.Label(hdr, text=title_text, font=F["title"],
+                 bg=t["ACCENT"], fg="#ffffff").pack()
 
         # Scrollable body
-        canvas = tk.Canvas(self.win, bg=DARK_BG, highlightthickness=0)
+        canvas = tk.Canvas(self.win, bg=t["DARK_BG"], highlightthickness=0)
         scrollbar = ttk.Scrollbar(self.win, orient="vertical", command=canvas.yview)
-        self.body = tk.Frame(canvas, bg=DARK_BG, padx=30, pady=10)
+        self.body = tk.Frame(canvas, bg=t["DARK_BG"], padx=34, pady=14)
 
         self.body.bind("<Configure>",
                        lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.create_window((0, 0), window=self.body, anchor="nw")
+        canvas_win = canvas.create_window((0, 0), window=self.body, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Stretch body to canvas width
+        def _on_canvas_configure(event):
+            canvas.itemconfig(canvas_win, width=event.width)
+        canvas.bind("<Configure>", _on_canvas_configure)
+
+        # Mousewheel scroll
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
         self.vars = {}
 
         if self.tab_type == "student":
-            self._field("Full Name *",       "name")
-            self._field("Roll Number *",     "roll_no")
-            self._dropdown("Department *",   "department", DEPARTMENTS_CSE)
-            self._dropdown("Year *",         "year",       STUDENT_YEARS)
-            self._field("Contact Number",    "contact")
-            self._field("Email",             "email")
+            self._field("Full Name",    "name",    required=True)
+            self._field("Roll Number",  "roll_no", required=True)
+            self._dropdown("Department", "department", DEPARTMENTS_CSE, required=True)
+            self._dropdown("Year",       "year",       STUDENT_YEARS,   required=True)
+            self._field("Contact Number", "contact")
+            self._field("Email",          "email")
         else:
-            self._field("Full Name *",       "name")
-            self._field("Employee ID *",     "employee_id")
-            self._dropdown("Department *",   "department", DEPARTMENTS_CSE)
-            self._dropdown("Designation *",  "designation", DESIGNATIONS)
-            self._field("Contact Number",    "contact")
-            self._field("Email",             "email")
+            self._field("Full Name",    "name",        required=True)
+            self._field("Employee ID",  "employee_id", required=True)
+            self._dropdown("Department", "department", DEPARTMENTS_CSE, required=True)
+            self._dropdown("Designation","designation", DESIGNATIONS,   required=True)
+            self._field("Contact Number", "contact")
+            self._field("Email",          "email")
 
-        self._date_field("Issue Date *",     "issue_date")
+        self._date_field("Issue Date",  "issue_date", required=True)
         self._photo_field()
 
-        # Buttons
-        btn_frame = tk.Frame(self.body, bg=DARK_BG, pady=10)
+        # ── Divider ──
+        tk.Frame(self.body, bg=t["SEPARATOR"], height=1).pack(fill="x", pady=(16, 10))
+
+        # ── Buttons ──
+        btn_frame = tk.Frame(self.body, bg=t["DARK_BG"])
         btn_frame.pack(fill="x")
 
-        tk.Button(btn_frame, text="Save",
-                  font=("Arial", 11, "bold"), bg="#2ecc71", fg="white",
-                  relief="flat", cursor="hand2",
+        tk.Button(btn_frame, text="💾  Save Record",
+                  font=F["body_bold"], bg=t["BTN_SUCCESS"], fg="#ffffff",
+                  activebackground="#16a34a", activeforeground="#ffffff",
+                  relief="flat", cursor="hand2", bd=0,
                   command=self.save).pack(side="left", expand=True,
-                                          fill="x", padx=(0, 6), ipady=8)
+                                          fill="x", padx=(0, 6), ipady=10)
         tk.Button(btn_frame, text="Cancel",
-                  font=("Arial", 11), bg=ACCENT2, fg="white",
-                  relief="flat", cursor="hand2",
+                  font=F["body"], bg=t["BTN_SECONDARY"], fg="#ffffff",
+                  activebackground="#64748b", activeforeground="#ffffff",
+                  relief="flat", cursor="hand2", bd=0,
                   command=self.win.destroy).pack(side="left", expand=True,
-                                                  fill="x", ipady=8)
+                                                  fill="x", ipady=10)
 
-    def _label(self, text):
-        tk.Label(self.body, text=text, font=("Arial", 9),
-                 bg=DARK_BG, fg=TEXT_SUB).pack(anchor="w", pady=(8, 1))
+    # ── Reusable field builders ───────────────────────────────
 
-    def _field(self, label, key):
-        self._label(label)
+    def _label(self, text, required=False):
+        t = _t()
+        row = tk.Frame(self.body, bg=t["DARK_BG"])
+        row.pack(anchor="w", pady=(10, 2))
+
+        tk.Label(row, text=text, font=F["caption_b"],
+                 bg=t["DARK_BG"], fg=t["TEXT_SUB"]).pack(side="left")
+
+        if required:
+            tk.Label(row, text=" *", font=F["caption_b"],
+                     bg=t["DARK_BG"], fg=t["BADGE_EXPIRED"]).pack(side="left")
+
+    def _field(self, label, key, required=False):
+        t = _t()
+        self._label(label, required)
+
+        wrap = tk.Frame(self.body, bg=t["ENTRY_BORDER"], padx=1, pady=1)
+        wrap.pack(fill="x")
+
         var = tk.StringVar()
-        tk.Entry(self.body, textvariable=var, font=("Arial", 10),
-                 bg=PANEL_BG, fg=TEXT_MAIN, insertbackground="white",
-                 relief="flat").pack(fill="x", ipady=6)
+        entry = tk.Entry(wrap, textvariable=var, font=F["body"],
+                         bg=t["ENTRY_BG"], fg=t["TEXT_MAIN"],
+                         insertbackground=t["TEXT_MAIN"],
+                         relief="flat")
+        entry.pack(fill="x", ipady=7, padx=1, pady=1)
+
+        # Focus ring
+        entry.bind("<FocusIn>",
+                   lambda e, w=wrap: w.configure(bg=t["ENTRY_FOCUS"]))
+        entry.bind("<FocusOut>",
+                   lambda e, w=wrap: w.configure(bg=t["ENTRY_BORDER"]))
+
         self.vars[key] = var
 
-    def _dropdown(self, label, key, options):
-        self._label(label)
+    def _dropdown(self, label, key, options, required=False):
+        t = _t()
+        self._label(label, required)
+
+        wrap = tk.Frame(self.body, bg=t["ENTRY_BORDER"], padx=1, pady=1)
+        wrap.pack(fill="x")
+
         var = tk.StringVar(value=options[0])
-        cb = ttk.Combobox(self.body, textvariable=var,
+        cb = ttk.Combobox(wrap, textvariable=var,
                           values=options, state="readonly",
-                          font=("Arial", 10))
-        cb.pack(fill="x", ipady=4)
+                          font=F["body"])
+        cb.pack(fill="x", ipady=4, padx=1, pady=1)
         self.vars[key] = var
 
-    def _date_field(self, label, key):
-        self._label(label)
+    def _date_field(self, label, key, required=False):
+        t = _t()
+        self._label(label, required)
+
+        wrap = tk.Frame(self.body, bg=t["ENTRY_BORDER"], padx=1, pady=1)
+        wrap.pack(fill="x")
+
         var = tk.StringVar(value=date.today().strftime("%d-%m-%Y"))
-        tk.Entry(self.body, textvariable=var, font=("Arial", 10),
-                 bg=PANEL_BG, fg=TEXT_MAIN, insertbackground="white",
-                 relief="flat").pack(fill="x", ipady=6)
-        tk.Label(self.body, text="Format: DD-MM-YYYY", font=("Arial", 8),
-                 bg=DARK_BG, fg="#666").pack(anchor="w")
+        entry = tk.Entry(wrap, textvariable=var, font=F["body"],
+                         bg=t["ENTRY_BG"], fg=t["TEXT_MAIN"],
+                         insertbackground=t["TEXT_MAIN"],
+                         relief="flat")
+        entry.pack(fill="x", ipady=7, padx=1, pady=1)
+
+        entry.bind("<FocusIn>",
+                   lambda e, w=wrap: w.configure(bg=t["ENTRY_FOCUS"]))
+        entry.bind("<FocusOut>",
+                   lambda e, w=wrap: w.configure(bg=t["ENTRY_BORDER"]))
+
+        tk.Label(self.body, text="📅  Format: DD-MM-YYYY", font=F["micro"],
+                 bg=t["DARK_BG"], fg=t["TEXT_HINT"]).pack(anchor="w", pady=(2, 0))
+
         self.vars[key] = var
 
     def _photo_field(self):
+        t = _t()
         self._label("Photo")
-        row = tk.Frame(self.body, bg=DARK_BG)
+
+        # Photo row with thumbnail preview
+        row = tk.Frame(self.body, bg=t["DARK_BG"])
         row.pack(fill="x", pady=(2, 0))
 
+        # Thumbnail preview (initially hidden)
+        self.photo_thumb = tk.Label(row, bg=t["DARK_BG"], width=5, height=3)
+        self.photo_thumb.pack(side="left", padx=(0, 8))
+
         self.photo_label = tk.Label(row, text="No photo selected",
-                                    font=("Arial", 9), bg=DARK_BG, fg=TEXT_SUB,
-                                    wraplength=280, anchor="w")
+                                    font=F["caption"], bg=t["DARK_BG"],
+                                    fg=t["TEXT_HINT"], wraplength=240, anchor="w")
         self.photo_label.pack(side="left", fill="x", expand=True)
 
-        tk.Button(row, text="Browse",
-                  font=("Arial", 9), bg=ACCENT, fg="white",
-                  relief="flat", cursor="hand2",
-                  command=self.browse_photo).pack(side="right", ipady=4, ipadx=8)
+        tk.Button(row, text="📷  Browse",
+                  font=F["caption_b"], bg=t["ACCENT"], fg="#ffffff",
+                  activebackground=t["ACCENT_HOVER"],
+                  relief="flat", cursor="hand2", bd=0,
+                  command=self.browse_photo).pack(side="right", ipady=5, ipadx=10)
+
+        # If editing and photo exists, show thumbnail
+        if self.photo_path and os.path.exists(self.photo_path):
+            self._update_photo_thumb(self.photo_path)
+
+    def _update_photo_thumb(self, path):
+        """Show a small thumbnail preview of the selected photo."""
+        try:
+            from PIL import Image, ImageTk
+            img = Image.open(path).resize((40, 50), Image.LANCZOS)
+            photo_img = ImageTk.PhotoImage(img)
+            self.photo_thumb.configure(image=photo_img)
+            self.photo_thumb.image = photo_img
+        except Exception:
+            pass
 
     # ── Populate for edit mode ────────────────────────────────
 
@@ -181,9 +270,25 @@ class RecordForm:
         photo = r.get("photo_path", "")
         if photo and os.path.exists(photo):
             self.photo_path = photo
-            self.photo_label.config(text=os.path.basename(photo))
+            self.photo_label.config(text=os.path.basename(photo), fg=_c("BADGE_VALID"))
+            self._update_photo_thumb(photo)
 
     # ── Photo browse ──────────────────────────────────────────
+
+    def validate_photo_face(self, path):
+        try:
+            import cv2
+            cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+            face_cascade = cv2.CascadeClassifier(cascade_path)
+            img = cv2.imread(path)
+            if img is None:
+                return False
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4)
+            return len(faces) > 0
+        except Exception as e:
+            print(f"Face validation error: {e}")
+            return True
 
     def browse_photo(self):
         path = filedialog.askopenfilename(
@@ -191,12 +296,37 @@ class RecordForm:
             filetypes=[("Image files", "*.jpg *.jpeg *.png *.bmp")]
         )
         if path:
+            if not self.validate_photo_face(path):
+                messagebox.showerror("Invalid Photo",
+                    "No clear human face detected in the selected photo.\n"
+                    "Please choose a valid photo containing a face.")
+                return
+
+            # Feature 05: Open crop dialog
+            try:
+                from photo_crop import PhotoCropDialog
+                crop_dlg = PhotoCropDialog(self.win, path, output_dir=PHOTOS_DIR)
+                self.win.wait_window(crop_dlg.win)
+
+                if crop_dlg.result_path:
+                    self.photo_path = crop_dlg.result_path
+                    self.photo_label.config(
+                        text=os.path.basename(crop_dlg.result_path),
+                        fg=_c("BADGE_VALID"),
+                    )
+                    self._update_photo_thumb(crop_dlg.result_path)
+                    return
+            except Exception as e:
+                print(f"Crop dialog error (falling back to raw copy): {e}")
+
+            # Fallback: direct copy
             filename  = os.path.basename(path)
             dest_path = os.path.join(PHOTOS_DIR, filename)
             try:
                 shutil.copy2(path, dest_path)
                 self.photo_path = dest_path
-                self.photo_label.config(text=filename, fg="#2ecc71")
+                self.photo_label.config(text=filename, fg=_c("BADGE_VALID"))
+                self._update_photo_thumb(dest_path)
             except Exception as e:
                 messagebox.showerror("Photo Error", str(e))
 

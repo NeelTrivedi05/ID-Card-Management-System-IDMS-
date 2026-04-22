@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+ENV/
+
+# AI Planning
+.planning/
+
+# # Database (SENSITIVE - Contains User/Student Data)
+# *.db
+# *.sqlite
+# idcard.db
+# idms.db
+
+# # Private Photos (PII - Personally Identifiable Information)
+# photos/
+# photo_crops/
+
+# # Logs
+# *.log
+# audit.log
+
+# # Local Config
+# theme.json
+
+# Temporary / Output Files
+*.pdf
+*.eps
+*.png
+!assets/
